@@ -16,5 +16,3 @@ Project Alpaca - (Project #1)
       <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/f6f1ac9a9c444159988aa368d2ad2e5a-49b56551ad86b177-full-play.gif">
     </a>
   </div>
-
-  
