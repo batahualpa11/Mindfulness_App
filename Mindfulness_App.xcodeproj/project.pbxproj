@@ -13,6 +13,8 @@
 		E700E4B82CFFF41F007E13B3 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = E700E4B72CFFF41F007E13B3 /* Base */; };
 		E700E4BA2CFFF421007E13B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E700E4B92CFFF421007E13B3 /* Assets.xcassets */; };
 		E700E4BD2CFFF421007E13B3 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = E700E4BC2CFFF421007E13B3 /* Base */; };
+		E76ABCD92D9E0A6B00D533B3 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76ABCD82D9E0A6B00D533B3 /* CardView.swift */; };
+		E76ABCDB2D9E0A7800D533B3 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76ABCDA2D9E0A7800D533B3 /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		E700E4B92CFFF421007E13B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E700E4BC2CFFF421007E13B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E700E4BE2CFFF421007E13B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E76ABCD82D9E0A6B00D533B3 /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		E76ABCDA2D9E0A7800D533B3 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +63,8 @@
 				E700E4B02CFFF41F007E13B3 /* AppDelegate.swift */,
 				E700E4B22CFFF41F007E13B3 /* SceneDelegate.swift */,
 				E700E4B42CFFF41F007E13B3 /* ViewController.swift */,
+				E76ABCD82D9E0A6B00D533B3 /* CardView.swift */,
+				E76ABCDA2D9E0A7800D533B3 /* DetailViewController.swift */,
 				E700E4B62CFFF41F007E13B3 /* Main.storyboard */,
 				E700E4B92CFFF421007E13B3 /* Assets.xcassets */,
 				E700E4BB2CFFF421007E13B3 /* LaunchScreen.storyboard */,
@@ -140,6 +146,8 @@
 			files = (
 				E700E4B52CFFF41F007E13B3 /* ViewController.swift in Sources */,
 				E700E4B12CFFF41F007E13B3 /* AppDelegate.swift in Sources */,
+				E76ABCDB2D9E0A7800D533B3 /* DetailViewController.swift in Sources */,
+				E76ABCD92D9E0A6B00D533B3 /* CardView.swift in Sources */,
 				E700E4B32CFFF41F007E13B3 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
