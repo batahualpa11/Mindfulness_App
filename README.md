@@ -3,6 +3,6 @@ Project Alpaca - (Project #1)
 
 
 ## Video Walkthrough
-<a href = "https://i.imgur.com/5l38cET.gif">
-   <img style = "max-width:200px;" src= "https://i.imgur.com/5l38cET.gif"> 
+<a href = "https://imgur.com/a/wht4BKD">
+   <img style = "max-width:300px;" src= "https://imgur.com/a/wht4BKD"> 
 </a>
