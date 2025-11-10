@@ -4,7 +4,7 @@ Project Alpaca - (Project #1)
 
 ## Video Walkthrough
 <div>
-  <img style="max-width:300px;" src="https://i.imgur.com/5l38cET.gif">
+  <img style="max-width:300px;" src="Wellbeing_Connect.gif">
 </div>
 
 
