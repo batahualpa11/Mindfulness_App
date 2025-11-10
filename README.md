@@ -3,5 +3,9 @@ Project Alpaca - (Project #1)
 
 
 ## Video Walkthrough
-![Walkthrough GIF](https://i.imgur.com/5l38cET.gif)
+<div>
+  <img style="max-width:300px;" src="https://i.imgur.com/5l38cET.gifhttps://i.imgur.com/OeemhT3.gif">
+</div>
+
+
 
