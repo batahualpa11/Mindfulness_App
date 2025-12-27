@@ -15,6 +15,8 @@
 		E700E4BD2CFFF421007E13B3 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = E700E4BC2CFFF421007E13B3 /* Base */; };
 		E76ABCD92D9E0A6B00D533B3 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76ABCD82D9E0A6B00D533B3 /* CardView.swift */; };
 		E76ABCDB2D9E0A7800D533B3 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76ABCDA2D9E0A7800D533B3 /* DetailViewController.swift */; };
+		E78966192EFF75D400303A2B /* SlidingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78966172EFF75D400303A2B /* SlidingCardView.swift */; };
+		E789661A2EFF75D400303A2B /* AdaptiveCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78966182EFF75D400303A2B /* AdaptiveCardModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		E700E4BE2CFFF421007E13B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E76ABCD82D9E0A6B00D533B3 /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		E76ABCDA2D9E0A7800D533B3 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		E78966172EFF75D400303A2B /* SlidingCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlidingCardView.swift; sourceTree = "<group>"; };
+		E78966182EFF75D400303A2B /* AdaptiveCardModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdaptiveCardModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +68,8 @@
 				E700E4B22CFFF41F007E13B3 /* SceneDelegate.swift */,
 				E700E4B42CFFF41F007E13B3 /* ViewController.swift */,
 				E76ABCD82D9E0A6B00D533B3 /* CardView.swift */,
+				E78966182EFF75D400303A2B /* AdaptiveCardModel.swift */,
+				E78966172EFF75D400303A2B /* SlidingCardView.swift */,
 				E76ABCDA2D9E0A7800D533B3 /* DetailViewController.swift */,
 				E700E4B62CFFF41F007E13B3 /* Main.storyboard */,
 				E700E4B92CFFF421007E13B3 /* Assets.xcassets */,
@@ -144,7 +150,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E789661A2EFF75D400303A2B /* AdaptiveCardModel.swift in Sources */,
 				E700E4B52CFFF41F007E13B3 /* ViewController.swift in Sources */,
+				E78966192EFF75D400303A2B /* SlidingCardView.swift in Sources */,
 				E700E4B12CFFF41F007E13B3 /* AppDelegate.swift in Sources */,
 				E76ABCDB2D9E0A7800D533B3 /* DetailViewController.swift in Sources */,
 				E76ABCD92D9E0A6B00D533B3 /* CardView.swift in Sources */,
