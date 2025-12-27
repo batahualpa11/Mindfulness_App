@@ -9,123 +9,76 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private let cardContainerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let pageIndicator: UIPageControl = {
-        let pc = UIPageControl()
-        pc.numberOfPages = 4
-        pc.currentPage = 0
-        pc.pageIndicatorTintColor = .gray
-        pc.currentPageIndicatorTintColor = .systemMint
-        pc.translatesAutoresizingMaskIntoConstraints = false
-        return pc
-    }()
-    
-    private let swipeHintLabel: UILabel = {
-        let label = UILabel()
-        label.text = "← Swipe right or left →"
-        label.font = .systemFont(ofSize: 14, weight: .medium)
-        label.textColor = .gray
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private var cards: [(card: CardView, type: DetailType)] = []
-    private var currentCardIndex: Int = 0
+    private let slider = SlidingCardView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        createCards()
-        displayCurrentCard()
+        loadAdaptiveCardsFromJSONAndSetup()
     }
     
     private func setupUI() {
         title = "Mindfulness"
         view.backgroundColor = .systemMint.withAlphaComponent(0.3)
-        
-        view.addSubview(cardContainerView)
-        view.addSubview(pageIndicator)
-        view.addSubview(swipeHintLabel)
-        
+
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(slider)
+
         NSLayoutConstraint.activate([
-            cardContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-            cardContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            cardContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            cardContainerView.heightAnchor.constraint(equalToConstant: 500),
-            
-            pageIndicator.topAnchor.constraint(equalTo: cardContainerView.bottomAnchor, constant: 30),
-            pageIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            swipeHintLabel.topAnchor.constraint(equalTo: pageIndicator.bottomAnchor, constant: 20),
-            swipeHintLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            swipeHintLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            swipeHintLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            slider.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            slider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
+            slider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+            slider.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.7)
         ])
-        
-        // Add swipe gestures
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-        swipeRight.direction = .right
-        view.addGestureRecognizer(swipeRight)
-        
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-        swipeLeft.direction = .left
-        view.addGestureRecognizer(swipeLeft)
+
+        // handle card button taps
+        slider.onCardButtonTap = { [weak self] model in
+            guard let self = self else { return }
+            let dt = self.detailType(from: model.type)
+            switch dt {
+            case .musicPodcasts: self.navigateToMusicPodcasts()
+            case .breathing: self.navigateToBreathing()
+            case .loss: self.navigateToLoss()
+            case .affirmations: self.navigateToAffirmations()
+            }
+        }
     }
     
-    private func createCards() {
-        // Music/Podcasts Card
-        let musicCard = CardView()
-        musicCard.configure(
-            with: UIImage(systemName: "headphones"),
-            title: "MUSIC/PODCASTS",
-            description: "Help users feel understood and empathized with"
-        )
-        musicCard.onButtonTap = { [weak self] in
-            self?.navigateToMusicPodcasts()
+    private func loadAdaptiveCardsFromJSONAndSetup() {
+        // Example JSON array (in real use this would come from a server or local file)
+        let json = """
+        [
+          { "id": "1", "title": "MUSIC/PODCASTS", "description": "Help users feel understood and empathized with", "imageSystemName": "headphones", "type": "musicPodcasts" },
+          { "id": "2", "title": "DIFFICULT INTERACTION", "description": "A short, guided breathing exercise to help calm the nervous system after a stressful interaction", "imageSystemName": "lungs.fill", "type": "breathing" },
+          { "id": "3", "title": "COPING WITH LOSS", "description": "A reflection exercise to process emotions after a patient passes away", "imageSystemName": "heart.fill", "type": "loss" },
+          { "id": "4", "title": "AFFIRMATIONS", "description": "For busy, on-the-go workers", "imageSystemName": "quote.bubble.fill", "type": "affirmations" }
+        ]
+        """
+
+        let data = Data(json.utf8)
+        do {
+            let models = try JSONDecoder().decode([AdaptiveCardModel].self, from: data)
+            slider.setCards(models)
+        } catch {
+            // Fallback to programmatic creation if decoding fails
+            let fallback = [
+                AdaptiveCardModel(id: "1", title: "MUSIC/PODCASTS", description: "Help users feel understood and empathized with", imageSystemName: "headphones", type: "musicPodcasts"),
+                AdaptiveCardModel(id: "2", title: "DIFFICULT INTERACTION", description: "A short breathing exercise", imageSystemName: "lungs.fill", type: "breathing"),
+                AdaptiveCardModel(id: "3", title: "COPING WITH LOSS", description: "Reflection exercise", imageSystemName: "heart.fill", type: "loss"),
+                AdaptiveCardModel(id: "4", title: "AFFIRMATIONS", description: "For busy, on-the-go workers", imageSystemName: "quote.bubble.fill", type: "affirmations")
+            ]
+            slider.setCards(fallback)
         }
-        cards.append((card: musicCard, type: .musicPodcasts))
-        
-        // Breathing Exercise Card
-        let breathingCard = CardView()
-        breathingCard.configure(
-            with: UIImage(systemName: "lungs.fill"),
-            title: "DIFFICULT INTERACTION",
-            description: "A short, guided breathing exercise to help calm the nervous system after being yelled at or facing a challenging patient/family interaction"
-        )
-        breathingCard.onButtonTap = { [weak self] in
-            self?.navigateToBreathing()
+    }
+
+    private func detailType(from typeString: String?) -> DetailType {
+        switch typeString {
+        case "musicPodcasts": return .musicPodcasts
+        case "breathing": return .breathing
+        case "loss": return .loss
+        case "affirmations": return .affirmations
+        default: return .musicPodcasts
         }
-        cards.append((card: breathingCard, type: .breathing))
-        
-        // Coping with Loss Card
-        let lossCard = CardView()
-        lossCard.configure(
-            with: UIImage(systemName: "heart.fill"),
-            title: "COPING WITH LOSS",
-            description: "A reflection exercise to process emotions after a patient passes away, helping users acknowledge their grief without suppressing it"
-        )
-        lossCard.onButtonTap = { [weak self] in
-            self?.navigateToLoss()
-        }
-        cards.append((card: lossCard, type: .loss))
-        
-        // Affirmations Card
-        let affirmationsCard = CardView()
-        affirmationsCard.configure(
-            with: UIImage(systemName: "quote.bubble.fill"),
-            title: "AFFIRMATIONS",
-            description: "For busy, on-the-go workers"
-        )
-        affirmationsCard.onButtonTap = { [weak self] in
-            self?.navigateToAffirmations()
-        }
-        cards.append((card: affirmationsCard, type: .affirmations))
     }
     
     private func displayCurrentCard() {
