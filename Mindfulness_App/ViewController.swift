@@ -9,87 +9,76 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private let scrollView: UIScrollView = {
-        let sv = UIScrollView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        sv.alwaysBounceVertical = true
-        return sv
-    }()
-    
-    private let containerView: UIView = {
+    private let cardContainerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private let stackView: UIStackView = {
-        let sv = UIStackView()
-        sv.axis = .vertical
-        sv.spacing = 20
-        sv.distribution = .fillEqually
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
+    private let pageIndicator: UIPageControl = {
+        let pc = UIPageControl()
+        pc.numberOfPages = 4
+        pc.currentPage = 0
+        pc.pageIndicatorTintColor = .gray
+        pc.currentPageIndicatorTintColor = .systemMint
+        pc.translatesAutoresizingMaskIntoConstraints = false
+        return pc
     }()
     
-    private let row1StackView: UIStackView = {
-        let sv = UIStackView()
-        sv.axis = .horizontal
-        sv.spacing = 20
-        sv.distribution = .fillEqually
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
+    private let swipeHintLabel: UILabel = {
+        let label = UILabel()
+        label.text = "← Swipe right or left →"
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .gray
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
-    private let row2StackView: UIStackView = {
-        let sv = UIStackView()
-        sv.axis = .horizontal
-        sv.spacing = 20
-        sv.distribution = .fillEqually
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
+    private var cards: [(card: CardView, type: DetailType)] = []
+    private var currentCardIndex: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupCards()
+        createCards()
+        displayCurrentCard()
     }
     
     private func setupUI() {
         title = "Mindfulness"
         view.backgroundColor = .systemMint.withAlphaComponent(0.3)
         
-        view.addSubview(scrollView)
-        scrollView.addSubview(containerView)
-        containerView.addSubview(stackView)
-        
-        stackView.addArrangedSubview(row1StackView)
-        stackView.addArrangedSubview(row2StackView)
+        view.addSubview(cardContainerView)
+        view.addSubview(pageIndicator)
+        view.addSubview(swipeHintLabel)
         
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            cardContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            cardContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            cardContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            cardContainerView.heightAnchor.constraint(equalToConstant: 500),
             
-            containerView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            containerView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            pageIndicator.topAnchor.constraint(equalTo: cardContainerView.bottomAnchor, constant: 30),
+            pageIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
-            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20)
+            swipeHintLabel.topAnchor.constraint(equalTo: pageIndicator.bottomAnchor, constant: 20),
+            swipeHintLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            swipeHintLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            swipeHintLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
         
-        // Set a fixed height for the rows to ensure proper card sizing
-        row1StackView.heightAnchor.constraint(equalToConstant: 300).isActive = true
-        row2StackView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        // Add swipe gestures
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeRight.direction = .right
+        view.addGestureRecognizer(swipeRight)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeLeft.direction = .left
+        view.addGestureRecognizer(swipeLeft)
     }
     
-    private func setupCards() {
+    private func createCards() {
         // Music/Podcasts Card
         let musicCard = CardView()
         musicCard.configure(
@@ -100,6 +89,7 @@ class ViewController: UIViewController {
         musicCard.onButtonTap = { [weak self] in
             self?.navigateToMusicPodcasts()
         }
+        cards.append((card: musicCard, type: .musicPodcasts))
         
         // Breathing Exercise Card
         let breathingCard = CardView()
@@ -111,6 +101,7 @@ class ViewController: UIViewController {
         breathingCard.onButtonTap = { [weak self] in
             self?.navigateToBreathing()
         }
+        cards.append((card: breathingCard, type: .breathing))
         
         // Coping with Loss Card
         let lossCard = CardView()
@@ -122,6 +113,7 @@ class ViewController: UIViewController {
         lossCard.onButtonTap = { [weak self] in
             self?.navigateToLoss()
         }
+        cards.append((card: lossCard, type: .loss))
         
         // Affirmations Card
         let affirmationsCard = CardView()
@@ -133,11 +125,54 @@ class ViewController: UIViewController {
         affirmationsCard.onButtonTap = { [weak self] in
             self?.navigateToAffirmations()
         }
+        cards.append((card: affirmationsCard, type: .affirmations))
+    }
+    
+    private func displayCurrentCard() {
+        // Remove previous card if any
+        cardContainerView.subviews.forEach { $0.removeFromSuperview() }
         
-        row1StackView.addArrangedSubview(musicCard)
-        row1StackView.addArrangedSubview(breathingCard)
-        row2StackView.addArrangedSubview(lossCard)
-        row2StackView.addArrangedSubview(affirmationsCard)
+        let currentCard = cards[currentCardIndex].card
+        cardContainerView.addSubview(currentCard)
+        
+        NSLayoutConstraint.activate([
+            currentCard.topAnchor.constraint(equalTo: cardContainerView.topAnchor),
+            currentCard.leadingAnchor.constraint(equalTo: cardContainerView.leadingAnchor),
+            currentCard.trailingAnchor.constraint(equalTo: cardContainerView.trailingAnchor),
+            currentCard.bottomAnchor.constraint(equalTo: cardContainerView.bottomAnchor)
+        ])
+        
+        pageIndicator.currentPage = currentCardIndex
+    }
+    
+    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        switch gesture.direction {
+        case .right:
+            // Swipe right goes to previous card
+            if currentCardIndex > 0 {
+                currentCardIndex -= 1
+                animateCardTransition()
+            }
+        case .left:
+            // Swipe left goes to next card
+            if currentCardIndex < cards.count - 1 {
+                currentCardIndex += 1
+                animateCardTransition()
+            }
+        default:
+            break
+        }
+    }
+    
+    private func animateCardTransition() {
+        UIView.transition(
+            with: cardContainerView,
+            duration: 0.3,
+            options: .transitionCrossDissolve,
+            animations: {
+                self.displayCurrentCard()
+            }
+        )
     }
     
     private func navigateToMusicPodcasts() {
