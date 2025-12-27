@@ -81,52 +81,7 @@ class ViewController: UIViewController {
         }
     }
     
-    private func displayCurrentCard() {
-        // Remove previous card if any
-        cardContainerView.subviews.forEach { $0.removeFromSuperview() }
-        
-        let currentCard = cards[currentCardIndex].card
-        cardContainerView.addSubview(currentCard)
-        
-        NSLayoutConstraint.activate([
-            currentCard.topAnchor.constraint(equalTo: cardContainerView.topAnchor),
-            currentCard.leadingAnchor.constraint(equalTo: cardContainerView.leadingAnchor),
-            currentCard.trailingAnchor.constraint(equalTo: cardContainerView.trailingAnchor),
-            currentCard.bottomAnchor.constraint(equalTo: cardContainerView.bottomAnchor)
-        ])
-        
-        pageIndicator.currentPage = currentCardIndex
-    }
     
-    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
-        switch gesture.direction {
-        case .right:
-            // Swipe right goes to previous card
-            if currentCardIndex > 0 {
-                currentCardIndex -= 1
-                animateCardTransition()
-            }
-        case .left:
-            // Swipe left goes to next card
-            if currentCardIndex < cards.count - 1 {
-                currentCardIndex += 1
-                animateCardTransition()
-            }
-        default:
-            break
-        }
-    }
-    
-    private func animateCardTransition() {
-        UIView.transition(
-            with: cardContainerView,
-            duration: 0.3,
-            options: .transitionCrossDissolve,
-            animations: {
-                self.displayCurrentCard()
-            }
-        )
-    }
     
     private func navigateToMusicPodcasts() {
         let vc = DetailViewController(type: .musicPodcasts)
